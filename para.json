@@ -1,0 +1,7 @@
+{
+    "input_file": "/home/cyf/ssd0/test",
+    "node_num": 1,
+    "average_chunk_size": 4096,
+    "super_chunk_width": 256
+}
+  
