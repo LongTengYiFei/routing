@@ -40,16 +40,16 @@ public:
 private:
     vector<LocalDeduplicator> local_dedup_list;
 
-    float metric_Total_Deduplication;
-    float metric_Data_Skew;
-    float metric_Effiective_Deduplication;
+    double metric_Total_Deduplication;
+    double metric_Data_Skew;
+    double metric_Effiective_Deduplication;
 
     long long total_size;
     long long total_dedup_size;
     long long total_unique_size;
 
-    float average_disk_usage;
-    float max_disk_usage;
+    double average_disk_usage;
+    double max_disk_usage;
 
     int node_nums;
 

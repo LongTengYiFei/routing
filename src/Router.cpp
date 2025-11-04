@@ -129,32 +129,38 @@ void Router::doBackup(){
     for(int i = 0; i < files.size(); i++){
         this->writeFile(files[i]);
     }
-    
+
     // update metric
     this->total_size = 0;
     this->total_dedup_size = 0;
     this->total_unique_size = 0;
 
-    float average_disk_usage = 0;
-    float max_disk_usage = 0;
+    this->average_disk_usage = 0;
+    this->max_disk_usage = 0;
 
     for(auto & local_dedup: this->local_dedup_list){
-        if(local_dedup.getDiskUsage() > max_disk_usage){
-            max_disk_usage = local_dedup.getDiskUsage();
-        }
         average_disk_usage += local_dedup.getDiskUsage();
+        max_disk_usage = max(max_disk_usage, local_dedup.getDiskUsage());
 
         this->total_size += local_dedup.getTotalDataSize();
         this->total_dedup_size += local_dedup.getDedupDataSize();
         this->total_unique_size += local_dedup.getUniqueDataSize();
+
+        local_dedup.stop();
     }
+
     average_disk_usage /= this->node_nums;
 
-    this->metric_Total_Deduplication = this->total_size / this->total_unique_size;
-    this->metric_Data_Skew = this->total_size / this->total_dedup_size;
-    this->metric_Effiective_Deduplication = this->metric_Total_Deduplication / this->metric_Data_Skew;
+    this->metric_Total_Deduplication = (double)this->total_size / (double)this->total_unique_size;
+    this->metric_Data_Skew = this->max_disk_usage / average_disk_usage;
+    this->metric_Effiective_Deduplication = (double)this->metric_Total_Deduplication / (double)this->metric_Data_Skew;
 
     // print metric
+    printf("total_size: %lld\n", this->total_size);
+    printf("total_dedup_size: %lld\n", this->total_dedup_size);
+    printf("total_unique_size: %lld\n", this->total_unique_size);
+    printf("average_disk_usage: %.2f\n", average_disk_usage);
+    printf("max_disk_usage: %.2f\n", max_disk_usage);
     printf("metric_Total_Deduplication: %.2f\n", this->metric_Total_Deduplication);
     printf("metric_Data_Skew: %.2f\n", this->metric_Data_Skew);
     printf("metric_Effiective_Deduplication: %.2f\n", this->metric_Effiective_Deduplication);

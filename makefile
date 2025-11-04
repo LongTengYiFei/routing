@@ -8,7 +8,7 @@ SRC = 	./src/main.cpp \
 
 EXE_NAME = cRouting
 INC = -I./include -I./utils 
-OPTION = -g -O3 -std=c++17 -mavx512bw
+OPTION = -g -O0 -std=c++17 -mavx512bw
 CXXFLAGS="-fdiagnostics-color=always"
 
 amazing:

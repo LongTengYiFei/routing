@@ -63,19 +63,19 @@ public:
     void stop();
     
     // getters
-    float getDiskUsage(){ 
+    double getDiskUsage(){ 
         std::lock_guard<std::mutex> lock(stats_mutex);
         return disk_usage_ratio;
     }
-    int getTotalDataSize(){ 
+    long long getTotalDataSize(){ 
         std::lock_guard<std::mutex> lock(stats_mutex);
         return local_total_data_size;
     }
-    int getDedupDataSize(){ 
+    long long getDedupDataSize(){ 
         std::lock_guard<std::mutex> lock(stats_mutex);
         return local_dedup_data_size;
     }
-    int getUniqueDataSize(){ 
+    long long getUniqueDataSize(){ 
         std::lock_guard<std::mutex> lock(stats_mutex);
         return local_unique_data_size;
     }
@@ -85,11 +85,11 @@ private:
     void dedupSuperChunk(const SuperChunk& super_chunk);
 
     // 统计数据
-    int local_total_data_size;
-    int local_dedup_data_size;
-    int local_unique_data_size;
+    long long local_total_data_size;
+    long long local_dedup_data_size;
+    long long local_unique_data_size;
     std::size_t disk_capacity;
-    float disk_usage_ratio;
+    double disk_usage_ratio;
     
     // 指纹索引
     std::unordered_set<Sha1Hash> fingerprint_index;
