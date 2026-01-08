@@ -146,16 +146,25 @@ void Router::doBackup(){
         this->total_dedup_size += local_dedup.getDedupDataSize();
         this->total_unique_size += local_dedup.getUniqueDataSize();
 
+        // local statistic
+        // printf("** ** \n");
+        // printf("total_size: %lld\n", local_dedup.getTotalDataSize());
+        // printf("dedup_size: %lld\n", local_dedup.getDedupDataSize());
+        // printf("unique_size: %lld\n", local_dedup.getUniqueDataSize());
+        // printf("disk_usage: %.2f\n", local_dedup.getDiskUsage());
+
         local_dedup.stop();
     }
 
     average_disk_usage /= this->node_nums;
 
-    this->metric_Total_Deduplication = (double)this->total_size / (double)this->total_unique_size;
+    this->metric_Total_Deduplication = ((double)this->total_size - (double)this->total_unique_size) 
+                                        / (double)this->total_size;
     this->metric_Data_Skew = this->max_disk_usage / average_disk_usage;
     this->metric_Effiective_Deduplication = (double)this->metric_Total_Deduplication / (double)this->metric_Data_Skew;
 
     // print metric
+    printf("--- --- --- ---\n");
     printf("total_size: %lld\n", this->total_size);
     printf("total_dedup_size: %lld\n", this->total_dedup_size);
     printf("total_unique_size: %lld\n", this->total_unique_size);
