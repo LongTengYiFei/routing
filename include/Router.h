@@ -35,7 +35,7 @@ public:
     int decideStorageNode(const Sha1Hash& super_chunk_feature);
     void doBackup();
     void writeFile(string file_path);
-    bool isSuperChunkBoundary(Sha1Hash chunk_hash, int super_chunk_width);
+    bool isSuperChunkBoundary(const Sha1Hash& chunk_hash, int super_chunk_width);
 
 private:
     vector<LocalDeduplicator> local_dedup_list;

@@ -37,11 +37,11 @@ struct Chunk{
 
 struct SuperChunk{
     vector<Chunk> chunk_list;
-    Sha1Hash feature;
+    Sha1Hash hash;
     int total_size;
 
     SuperChunk(){
         total_size = 0;
-        feature.fill(0);
+        hash.fill(0);
     }
 };

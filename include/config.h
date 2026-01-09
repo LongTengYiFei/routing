@@ -7,10 +7,10 @@ using namespace std;
 
 enum ROUTING_METHOD{
     STATEFUL,
+    STATELESS_FIRST_HASH_ALL,
     STATELESS_FIRST_HASH_64,
-    STATELESS_FIRST_HASH_WHOLE_CHUNK,
+    STATELESS_MIN_HASH_ALL,
     STATELESS_MIN_HASH_64,
-    STATELESS_MIN_HASH_WHOLE_CHUNK,
 };
 
 class Config{
@@ -25,12 +25,14 @@ class Config{
         int getNodeNums(){return this->node_num;}
         int getAverageChunkSize(){return this->average_chunk_size;}
         int getSuperChunkWidth(){return this->super_chunk_width;}
+        enum ROUTING_METHOD getRoutingMethod(){return this->routing_method;};
 
         // setters
         void setInputFile(char* s){this->input_file = s;}
         void setNodeNums(int n){this->node_num = n;}
         void setAverageChunkSize(int n){this->average_chunk_size = n;}
         void setSuperChunkWidth(int n){this->super_chunk_width = n;}
+        void setRoutingMethod(char* s){this->routing_method = routingMethodTrans(s);}
 
         // you know
         void parse_argument(int argc, char **argv)
@@ -64,7 +66,25 @@ class Config{
                     Config::getInstance().setAverageChunkSize(val_int);
                 }else if (strcmp(name, "super_chunk_width") == 0) {
                     Config::getInstance().setSuperChunkWidth(val_int);
+                }else if(strcmp(name, "routing_method") == 0){
+                    Config::getInstance().setRoutingMethod(valuestring); 
                 }
+            }
+        }
+
+        // trans
+        enum ROUTING_METHOD routingMethodTrans(char* s){
+            if(strcmp(s, "first_hash_all") == 0){
+                return STATELESS_FIRST_HASH_ALL;
+            }else if(strcmp(s, "first_hash_64") == 0){
+                return STATELESS_FIRST_HASH_64;
+            }else if(strcmp(s, "min_hash_all") == 0){
+                return STATELESS_MIN_HASH_ALL;
+            }else if(strcmp(s, "min_hash_64") == 0){
+                return STATELESS_MIN_HASH_64;
+            }else{
+                printf("Not Support Routing Method\n");
+                exit(-1);
             }
         }
 
@@ -80,7 +100,7 @@ private:
     Config() {
         // 默认参数配置
         normal_level = 2;
-        routing_method = STATELESS_FIRST_HASH_64;
+        routing_method = STATELESS_FIRST_HASH_ALL;
     }
 };
 #endif

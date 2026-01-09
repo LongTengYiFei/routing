@@ -15,7 +15,7 @@
 using namespace std;
 
 Sha1Hash Router::getFeature(const SuperChunk& super_chunk, enum ROUTING_METHOD method){
-    if(method == STATELESS_MIN_HASH_WHOLE_CHUNK){
+    if(method == STATELESS_MIN_HASH_ALL){
         Sha1Hash min_hash = super_chunk.chunk_list.front().hash;
         for(auto & chunk: super_chunk.chunk_list){
             if(chunk.hash < min_hash){
@@ -23,7 +23,7 @@ Sha1Hash Router::getFeature(const SuperChunk& super_chunk, enum ROUTING_METHOD m
             }
         }
         return min_hash;
-    }else if(method == STATELESS_FIRST_HASH_WHOLE_CHUNK){
+    }else if(method == STATELESS_FIRST_HASH_ALL){
         return super_chunk.chunk_list.front().hash;
     }else{
         printf("Unknown routing method\n");
@@ -42,7 +42,7 @@ int Router::decideStorageNode(const Sha1Hash& super_chunk_feature) {
     return static_cast<int>(hash_value % this->node_nums);
 }
 
-bool Router::isSuperChunkBoundary(Sha1Hash chunk_hash, int temp_super_chunk_width){
+bool Router::isSuperChunkBoundary(const Sha1Hash &chunk_hash, int temp_super_chunk_width){
     int dest_super_chunk_width = Config::getInstance().getSuperChunkWidth();
 
     if(temp_super_chunk_width >= 2 * dest_super_chunk_width){
@@ -75,37 +75,49 @@ void Router::writeFile(string file_path){
     long n_read = read(fd, this->single_file_cache, FILE_CACHE_SIZE);
     close(fd);
 
-    long file_offset = 0;
+    enum ROUTING_METHOD routing_method = Config::getInstance().getRoutingMethod();
 
     SuperChunk tmp_super_chunk;
     Sha1Hash tmp_chunk_hash;
+    Sha1Hash tmp_chunk_hash_feature;
     int tmp_super_chunk_width = 0;
-    while(file_offset < n_read){
-        // cdc
+    for(long file_offset = 0; file_offset < n_read; ){
+        // CDC
         long chunk_length = ramcdc_avx_512(reinterpret_cast<const char*>(this->single_file_cache + file_offset), n_read - file_offset);
         
-        // hash
+        // Chunk hash
         SHA1(this->single_file_cache + file_offset, chunk_length, tmp_chunk_hash.data());
 
-        // update super chunk
+        // Update Super chunk
         tmp_super_chunk.total_size += chunk_length;
         tmp_super_chunk.chunk_list.push_back(Chunk{
                                     this->single_file_cache + file_offset,
                                     static_cast<int>(chunk_length),
                                     tmp_chunk_hash});
-        tmp_super_chunk.feature = tmp_chunk_hash;
         tmp_super_chunk_width ++;
 
-        if(isSuperChunkBoundary(tmp_super_chunk.feature, tmp_super_chunk_width)){
+        // 用chunk hash来决定边界
+        if(isSuperChunkBoundary(tmp_chunk_hash, tmp_super_chunk_width)){
+            // Super Chunk feature
+            if(routing_method == STATELESS_FIRST_HASH_ALL)
+                // first hash all
+                tmp_super_chunk.hash = tmp_super_chunk.chunk_list.front().hash; 
+            else if(routing_method == STATELESS_FIRST_HASH_64)
+                // first hash 64
+                SHA1(tmp_super_chunk.chunk_list.front().data, 64, tmp_super_chunk.hash.data());
+            else{
+                printf("Unknown routing method\n");
+                exit(-1);
+            }
+
             // boundary and routing
-            tmp_super_chunk.feature = tmp_super_chunk.chunk_list.front().hash; // first hash
-            int node_id = this->decideStorageNode(tmp_super_chunk.feature);
+            int node_id = this->decideStorageNode(tmp_super_chunk.hash);
             this->local_dedup_list[node_id].insertSuperChunkTask(tmp_super_chunk);
 
             // clear tmp_super_chunk
             tmp_super_chunk.chunk_list.clear();
             tmp_super_chunk.total_size = 0;
-            tmp_super_chunk.feature.fill(0);
+            tmp_super_chunk.hash.fill(0);
         }
 
         file_offset += chunk_length;
