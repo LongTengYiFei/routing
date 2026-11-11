@@ -1,7 +1,7 @@
 {
-    "input_file": "/home/cyf/ssd0/sfd_datasets/tar",
-    "node_num": 16,
-    "average_chunk_size": 4096,
-    "super_chunk_width": 256
+  "input_file": "/home/cyf/ssd0/sfd_datasets/tar",
+  "routing_method": "first_hash_all",
+  "node_num": 64,
+  "average_chunk_size": 4096,
+  "super_chunk_width": 256
 }
-  

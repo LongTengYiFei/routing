@@ -1,23 +1,24 @@
 #!/bin/bash
 
 para_path="/home/cyf/routing/para.json"
-output_path="/home/cyf/routing/experiment/result.txt"
+output_path="/home/cyf/routing/experiment/result2.txt"
 
 input_file=(
-    # "/home/cyf/ssd0/Android"
-    # "/home/cyf/ssd0/CHM"
-    # "/home/cyf/ssd0/sfd_datasets/tar"
+    "/home/cyf/ssd0/MUD_CODE/Android"
+    "/home/cyf/ssd0/MUD_CODE/CHM"
+    "/home/cyf/ssd0/sfd_datasets/tar"
     "/home/cyf/ssd0/sfd_datasets/pdf"
     "/home/cyf/ssd0/sfd_datasets/apk_freefire"
     "/home/cyf/ssd0/sfd_datasets/apk_pubg"
 )
 
 routing_methods=(
-    # "first_hash_all"
+    #"first_hash_all"
     "first_hash_64"
 )
 
-node_num=(1 2 4 8 16 32 64)
+#node_num=(1 2 4 8 16 32 64)
+node_num=(64)
 
 # 确保输出目录存在
 mkdir -p "$(dirname "$output_path")"

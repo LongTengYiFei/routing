@@ -40,18 +40,20 @@ public:
 private:
     vector<LocalDeduplicator> local_dedup_list;
 
+    /*
+        statistics and metrics
+    */
     double metric_Total_Deduplication;
     double metric_Data_Skew;
     double metric_Effiective_Deduplication;
-
     long long total_size;
     long long total_dedup_size;
     long long total_unique_size;
-
     double average_disk_usage;
     double max_disk_usage;
+    long long hash_time_hash_64_us = 0;
+    long long hash_time_hash_all_us = 0;
 
     int node_nums;
-
     uint8_t* single_file_cache;
 };

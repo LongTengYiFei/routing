@@ -11,6 +11,7 @@
 #include <vector>
 #include <algorithm>
 #include <filesystem>
+#include <sys/time.h>
 
 using namespace std;
 
@@ -66,6 +67,8 @@ bool Router::isSuperChunkBoundary(const Sha1Hash &chunk_hash, int temp_super_chu
 }
 
 void Router::writeFile(string file_path){
+    struct timeval start_time, end_time;
+
     // read file
     int fd = open(file_path.c_str(), O_RDONLY);
     if(fd == -1){
@@ -86,7 +89,10 @@ void Router::writeFile(string file_path){
         long chunk_length = ramcdc_avx_512(reinterpret_cast<const char*>(this->single_file_cache + file_offset), n_read - file_offset);
         
         // Chunk hash
+        gettimeofday(&start_time, NULL);
         SHA1(this->single_file_cache + file_offset, chunk_length, tmp_chunk_hash.data());
+        gettimeofday(&end_time, NULL);
+        hash_time_hash_all_us += (end_time.tv_sec - start_time.tv_sec) * 1000000 + (end_time.tv_usec - start_time.tv_usec);
 
         // Update Super chunk
         tmp_super_chunk.total_size += chunk_length;
@@ -102,10 +108,14 @@ void Router::writeFile(string file_path){
             if(routing_method == STATELESS_FIRST_HASH_ALL)
                 // first hash all
                 tmp_super_chunk.hash = tmp_super_chunk.chunk_list.front().hash; 
-            else if(routing_method == STATELESS_FIRST_HASH_64)
+            else if(routing_method == STATELESS_FIRST_HASH_64){
                 // first hash 64
+                gettimeofday(&start_time, NULL);
                 SHA1(tmp_super_chunk.chunk_list.front().data, 64, tmp_super_chunk.hash.data());
-            else{
+                gettimeofday(&end_time, NULL);
+                hash_time_hash_64_us += (end_time.tv_sec - start_time.tv_sec) * 1000000 + (end_time.tv_usec - start_time.tv_usec);
+
+            }else{
                 printf("Unknown routing method\n");
                 exit(-1);
             }
@@ -185,4 +195,10 @@ void Router::doBackup(){
     printf("metric_Total_Deduplication: %.2f\n", this->metric_Total_Deduplication);
     printf("metric_Data_Skew: %.2f\n", this->metric_Data_Skew);
     printf("metric_Effiective_Deduplication: %.2f\n", this->metric_Effiective_Deduplication);
+
+    printf("hash time hash 64 us: %lld\n", hash_time_hash_64_us);
+    printf("hash time hash 64 s: %.2f\n", hash_time_hash_64_us / 1000000.0);
+    printf("hash time hash all us: %lld\n", hash_time_hash_all_us);
+    printf("hash time hash all s: %.2f\n", hash_time_hash_all_us / 1000000.0);
+
 }

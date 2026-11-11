@@ -1,0 +1,108 @@
+正在测试: input_file=/home/cyf/ssd0/MUD_CODE/Android, routing_method=first_hash_64, node_num=64
+=== 程序输出 ===
+--- --- --- ---
+total_size: 213030633472
+total_dedup_size: 199096855399
+total_unique_size: 13933778073
+average_disk_usage: 0.00
+max_disk_usage: 0.01
+metric_Total_Deduplication: 0.93
+metric_Data_Skew: 2.11
+metric_Effiective_Deduplication: 0.44
+hash time hash 64 us: 26986301
+hash time hash 64 s: 26.99
+hash time hash all us: 210821122
+hash time hash all s: 210.82
+=== 程序结束 ===
+完成: input_file=/home/cyf/ssd0/MUD_CODE/Android, routing_method=first_hash_64, node_num=64
+----------------------------------------
+正在测试: input_file=/home/cyf/ssd0/MUD_CODE/CHM, routing_method=first_hash_64, node_num=64
+=== 程序输出 ===
+--- --- --- ---
+total_size: 214747955200
+total_dedup_size: 139047991284
+total_unique_size: 75699963916
+average_disk_usage: 0.02
+max_disk_usage: 0.04
+metric_Total_Deduplication: 0.65
+metric_Data_Skew: 2.41
+metric_Effiective_Deduplication: 0.27
+hash time hash 64 us: 23033446
+hash time hash 64 s: 23.03
+hash time hash all us: 208468272
+hash time hash all s: 208.47
+=== 程序结束 ===
+完成: input_file=/home/cyf/ssd0/MUD_CODE/CHM, routing_method=first_hash_64, node_num=64
+----------------------------------------
+正在测试: input_file=/home/cyf/ssd0/sfd_datasets/tar, routing_method=first_hash_64, node_num=64
+=== 程序输出 ===
+--- --- --- ---
+total_size: 147273502720
+total_dedup_size: 104548745101
+total_unique_size: 42724757619
+average_disk_usage: 0.01
+max_disk_usage: 0.02
+metric_Total_Deduplication: 0.71
+metric_Data_Skew: 1.64
+metric_Effiective_Deduplication: 0.43
+hash time hash 64 us: 15512584
+hash time hash 64 s: 15.51
+hash time hash all us: 142537515
+hash time hash all s: 142.54
+=== 程序结束 ===
+完成: input_file=/home/cyf/ssd0/sfd_datasets/tar, routing_method=first_hash_64, node_num=64
+----------------------------------------
+正在测试: input_file=/home/cyf/ssd0/sfd_datasets/pdf, routing_method=first_hash_64, node_num=64
+=== 程序输出 ===
+--- --- --- ---
+total_size: 5926731389
+total_dedup_size: 2318543566
+total_unique_size: 3608187823
+average_disk_usage: 0.00
+max_disk_usage: 0.00
+metric_Total_Deduplication: 0.39
+metric_Data_Skew: 1.90
+metric_Effiective_Deduplication: 0.21
+hash time hash 64 us: 605220
+hash time hash 64 s: 0.61
+hash time hash all us: 6700053
+hash time hash all s: 6.70
+=== 程序结束 ===
+完成: input_file=/home/cyf/ssd0/sfd_datasets/pdf, routing_method=first_hash_64, node_num=64
+----------------------------------------
+正在测试: input_file=/home/cyf/ssd0/sfd_datasets/apk_freefire, routing_method=first_hash_64, node_num=64
+=== 程序输出 ===
+--- --- --- ---
+total_size: 22865841494
+total_dedup_size: 9587785597
+total_unique_size: 13278055897
+average_disk_usage: 0.00
+max_disk_usage: 0.00
+metric_Total_Deduplication: 0.42
+metric_Data_Skew: 1.03
+metric_Effiective_Deduplication: 0.41
+hash time hash 64 us: 3051816
+hash time hash 64 s: 3.05
+hash time hash all us: 22698899
+hash time hash all s: 22.70
+=== 程序结束 ===
+完成: input_file=/home/cyf/ssd0/sfd_datasets/apk_freefire, routing_method=first_hash_64, node_num=64
+----------------------------------------
+正在测试: input_file=/home/cyf/ssd0/sfd_datasets/apk_pubg, routing_method=first_hash_64, node_num=64
+=== 程序输出 ===
+--- --- --- ---
+total_size: 26431745577
+total_dedup_size: 8163932247
+total_unique_size: 18267813330
+average_disk_usage: 0.00
+max_disk_usage: 0.00
+metric_Total_Deduplication: 0.31
+metric_Data_Skew: 1.03
+metric_Effiective_Deduplication: 0.30
+hash time hash 64 us: 3489583
+hash time hash 64 s: 3.49
+hash time hash all us: 26296200
+hash time hash all s: 26.30
+=== 程序结束 ===
+完成: input_file=/home/cyf/ssd0/sfd_datasets/apk_pubg, routing_method=first_hash_64, node_num=64
+----------------------------------------
